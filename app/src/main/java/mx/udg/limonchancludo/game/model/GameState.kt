@@ -1,5 +1,7 @@
 package mx.udg.limonchancludo.game.model
 
+import mx.udg.limonchancludo.game.engine.GameMode
+
 const val START_LIVES = 3
 
 /**
@@ -23,6 +25,12 @@ class GameState(val maze: Maze, val level: Int) {
 
     var invulnerable: Float = 0f
         private set
+
+    /** Tiempo restante en segundos de modo FRIGHTENED para las sandalias. */
+    var frightenedTimer: Float = 0f
+
+    /** Modo de juego actual (CHASE / SCATTER). */
+    var currentMode: GameMode = GameMode.CHASE
 
     /** true = limón ya comido en esa celda (índice row*width + col). */
     val eaten: BooleanArray = BooleanArray(maze.width * maze.height)
@@ -67,6 +75,18 @@ class GameState(val maze: Maze, val level: Int) {
 
     internal fun tickInvulnerable(dt: Float) {
         if (invulnerable > 0f) invulnerable = (invulnerable - dt).coerceAtLeast(0f)
+    }
+
+    internal fun tickFrightenedTimer(dt: Float) {
+        if (frightenedTimer > 0f) frightenedTimer = (frightenedTimer - dt).coerceAtLeast(0f)
+    }
+
+    internal fun setFrightenedTimer(seconds: Float) {
+        frightenedTimer = seconds
+    }
+
+    internal fun setCurrentMode(mode: GameMode) {
+        currentMode = mode
     }
 
     fun loseLife() {

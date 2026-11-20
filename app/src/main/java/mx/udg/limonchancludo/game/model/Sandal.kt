@@ -1,6 +1,8 @@
 package mx.udg.limonchancludo.game.model
 
 import androidx.compose.ui.graphics.Color
+import mx.udg.limonchancludo.game.assets.PixelSprite
+import mx.udg.limonchancludo.game.assets.SandalSprites
 
 enum class SandalType {
     BLINKY,   // Rojo: persegue directamente la posición del jugador
@@ -10,7 +12,8 @@ enum class SandalType {
 }
 
 /**
- * Sandía (enemigo) como Actor en movimiento por el mapa.
+ * Sandalia (enemigo) como Actor en movimiento por el mapa.
+ * Cada tipo tiene su propio color, comportamiento y esquina de hogar (Scatter).
  */
 class Sandal(
     startCol: Int,
@@ -18,13 +21,27 @@ class Sandal(
     val type: SandalType,
     val color: Color
 ) : Actor(startCol, startRow, Direction.UP) {
-    /** Casilla de "hogar" (Scatter target) asignada a cada tipo */
-    fun homeTarget(): Pair<Int, Int> = when (type) {
+
+    /** Estado actual de la sandalia. */
+    var state: SandalState = SandalState.CHASE
+        internal set
+
+    /** Esquina de dispersión (Scatter target) asignada a cada tipo. */
+    fun scatterTarget(): Pair<Int, Int> = when (type) {
         SandalType.BLINKY -> Pair(20, 1)      // Esquina superior derecha
         SandalType.PINKY -> Pair(0, 1)        // Esquina superior izquierda
         SandalType.INKY -> Pair(20, 22)       // Esquina inferior derecha
         SandalType.CLYDE -> Pair(0, 22)       // Esquina inferior izquierda
     }
+
+    /** Casilla de la casa (centro del laberinto) a donde regresan al ser comidos (EATEN). */
+    fun houseTarget(): Pair<Int, Int> = Pair(10, 11)
+
+    /** Casilla de hogar (Scatter) por compatibilidad. */
+    fun homeTarget(): Pair<Int, Int> = scatterTarget()
+
+    /** Devuelve el sprite correspondiente al estado actual. */
+    fun currentSprite(): PixelSprite = SandalSprites.spriteFor(type, state)
 }
 
 object Sandals {

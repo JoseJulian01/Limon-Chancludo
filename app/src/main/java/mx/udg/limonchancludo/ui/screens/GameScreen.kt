@@ -67,6 +67,7 @@ fun GameScreen(
                 is GameEvent.PowerEaten -> audio.playEat()
                 is GameEvent.PlayerDied -> audio.playDie()
                 is GameEvent.LevelCleared -> audio.playLevelCleared()
+                is GameEvent.SandalEaten -> audio.playEat()
             }
         }
     }

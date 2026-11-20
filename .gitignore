@@ -16,3 +16,8 @@ local.properties
 
 # Build outputs (Android)
 /app/build/
+
+# Documentación interna
+PRD.md
+tech_design.md
+PLAN.md

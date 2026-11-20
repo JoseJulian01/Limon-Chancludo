@@ -76,14 +76,20 @@ class GameViewModel : ViewModel() {
                     while (accumulator >= FIXED_STEP) {
                         val events = engine.step(FIXED_STEP)
                         val nowTime = engine.elapsed
-                        for (e in events) {
-                            _events.tryEmit(e)
-                            when (e) {
-                                is GameEvent.LemonEaten -> addFloating(e.col, e.row, "+${e.points}", nowTime)
-                                is GameEvent.PowerEaten -> addFloating(e.col, e.row, "+${e.points}", nowTime)
-                                else -> Unit
+                            for (e in events) {
+                                _events.tryEmit(e)
+                                when (e) {
+                                    is GameEvent.LemonEaten -> addFloating(e.col, e.row, "+${e.points}", nowTime)
+                                    is GameEvent.PowerEaten -> addFloating(e.col, e.row, "+${e.points}", nowTime)
+                                    is GameEvent.SandalEaten -> addFloating(
+                                        engine.state.player.col,
+                                        engine.state.player.row,
+                                        "+${e.points}",
+                                        nowTime
+                                    )
+                                    else -> Unit
+                                }
                             }
-                        }
                         accumulator -= FIXED_STEP
                     }
                     val snap = engine.snapshot()
