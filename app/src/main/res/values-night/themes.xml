@@ -1,0 +1,10 @@
+<resources>
+    <!-- Estética arcade: siempre oscuro -->
+    <style name="Theme.LimonChancludo" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">@color/lemon_yellow</item>
+        <item name="android:colorAccent">@color/neon_blue</item>
+        <item name="android:statusBarColor">@color/night_background</item>
+        <item name="android:navigationBarColor">@color/night_background</item>
+        <item name="android:windowBackground">@color/night_background</item>
+    </style>
+</resources>
