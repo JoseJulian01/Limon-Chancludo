@@ -87,30 +87,28 @@ fun GameCanvas(
         }
 
         // Sandalias (enemigos) con sprite pixelado según estado y tipo
-        val frightenedBlink = ((t * 10).toInt() % 2) == 0
         for (e in snapshot.enemies) {
             val px = offsetX + e.x * tileSize
             val py = offsetY + e.y * tileSize
 
-            // No dibujar si está comida (EATEN) y en parpadeo de transición, o si está fuera del área visible
-            val visible = when (e.state) {
-                SandalState.EATEN -> true // Se dibuja como solo ojos, regresando a casa
-                SandalState.FRIGHTENED -> frightenedBlink // Parpadeo cuando está asustada
-                else -> true
+            val isEnding = e.state == SandalState.FRIGHTENED && snapshot.frightenedTimer <= 2.0f
+            val blink = !isEnding || ((t * 10).toInt() % 2) == 0
+
+            val sprite = if (isEnding && !blink) {
+                SandalSprites.spriteFor(e.type, SandalState.CHASE)
+            } else {
+                SandalSprites.spriteFor(e.type, e.state)
             }
 
-            if (visible) {
-                val sprite = SandalSprites.spriteFor(e.type, e.state)
-                val spriteSize = tileSize * 0.92f
-                drawPixelSprite(
-                    sprite = sprite,
-                    dstOffset = IntOffset(
-                        (px + (tileSize - spriteSize) / 2f).toInt(),
-                        (py + (tileSize - spriteSize) / 2f).toInt()
-                    ),
-                    dstSize = IntSize(spriteSize.toInt(), spriteSize.toInt())
-                )
-            }
+            val spriteSize = tileSize * 0.92f
+            drawPixelSprite(
+                sprite = sprite,
+                dstOffset = IntOffset(
+                    (px + (tileSize - spriteSize) / 2f).toInt(),
+                    (py + (tileSize - spriteSize) / 2f).toInt()
+                ),
+                dstSize = IntSize(spriteSize.toInt(), spriteSize.toInt())
+            )
         }
 
         // Mono interpolado

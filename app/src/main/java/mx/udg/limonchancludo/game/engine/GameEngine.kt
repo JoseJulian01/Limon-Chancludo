@@ -212,6 +212,10 @@ class GameEngine(private val levelIndex: Int = 0) {
                 // La sandalia regresa a casa (EATEN -> houseTarget)
             }
 
+            SandalState.EATEN -> {
+                // Las sandalias en estado EATEN (solo ojos) son inofensivas
+            }
+
             else -> {
                 // El jugador muere
                 state.loseLife()
